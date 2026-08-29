@@ -1,7 +1,82 @@
-# Tauri + Vue + TypeScript
+# 记账
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+一款运行在 **Windows 和 Mac 电脑**上的个人记账桌面软件。
 
-## Recommended IDE Setup
+> 目标：**3 秒记完一笔账**，让记账成为不费力的习惯。
 
-- [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## 功能特性
+
+- **记一笔**：记录每笔支出和收入，金额精确到分；支出 / 收入一键切换
+- **2 级分类**：13 个一级大类（支出 9 个 + 收入 4 个），每个大类下有常用二级小类，分类管理支持新增、重命名、删除
+- **流水列表**：所有收支按日期分组展示，最近在前；点击记录可编辑或删除
+- **本月汇总**：首页顶部卡片显示本月支出、本月收入、本月结余
+- **数据本地存储**：数据全部保存在自己电脑的 SQLite 数据库里，不联网、不上传，隐私安全
+- **中文界面**：全中文，零学习成本
+
+## 技术栈
+
+| 层 | 技术 |
+|---|---|
+| 桌面外壳 | [Tauri 2](https://tauri.app/)（安装包约 10MB，内存占用小） |
+| 前端框架 | Vue 3 + TypeScript + Vite |
+| 数据存储 | SQLite（[@tauri-apps/plugin-sql](https://github.com/tauri-apps/plugins-workspace/tree/v2/plugins/sql)） |
+
+## 页面说明
+
+APP 共 3 个页面，底部导航切换：
+
+1. **记账页**（首页）：显示本月汇总，数字键盘快速输入金额，选择分类后一键保存
+2. **流水页**：按日期分组的收支明细，支持编辑与删除
+3. **设置页**：分类管理（新增 / 重命名 / 删除二级分类）、关于
+
+## 开始使用
+
+### 开发环境
+
+- [Node.js](https://nodejs.org/)（≥ 18）
+- [Rust](https://www.rust-lang.org/) 工具链
+- Windows 用户还需安装 [WebView2](https://developer.microsoft.com/microsoft-edge/webview2/)（Win11 自带）
+
+### 运行与构建
+
+```bash
+# 安装依赖
+npm install
+
+# 启动开发版
+npm run tauri dev
+
+# 打包安装包（产物在 src-tauri/target/release/bundle/）
+npm run tauri build
+```
+
+## 项目结构
+
+```
+├── src/                  # 前端代码（Vue 3 + TypeScript）
+│   ├── pages/            # 三个页面：记账、流水、设置
+│   ├── db.ts             # SQLite 数据库操作
+│   ├── types.ts          # 类型定义
+│   └── App.vue           # 根组件（底部导航）
+├── src-tauri/            # 桌面外壳（Rust）
+├── public/               # 静态资源
+├── 产品设计文档.md         # 产品功能、分类体系、界面设计说明
+└── package.json
+```
+
+## 数据说明
+
+- 账目数据保存在电脑本机应用数据目录下的 SQLite 数据库文件中（不放在项目文件夹内）
+- 删除记录前有二次确认，删除后不可恢复
+- 数据完全离线，不会上传到任何服务器
+
+## 版本规划
+
+| 版本 | 内容 | 状态 |
+|---|---|---|
+| V1 | 记账核心（记一笔、流水、月汇总、分类管理） | ✅ 已完成 |
+| V2 | 统计图表：分类占比饼图、每月趋势柱状图 | 规划中 |
+| V3 | 每月预算与超支提醒、数据导出 Excel | 规划中 |
+| V4 | 多账本、手机版 | 远期 |
+
+详细的产品设计见 [产品设计文档.md](./产品设计文档.md)。
